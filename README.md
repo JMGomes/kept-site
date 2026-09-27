@@ -27,6 +27,11 @@ The site is live at https://jmgomes.github.io/kept-site/. GitHub Pages serves th
 branch from the repository root. `.nojekyll` keeps Pages from processing the files. Push to
 `main` and the site updates within a minute or two.
 
+Pages tells browsers to keep every file for ten minutes, and Safari keeps stylesheets and
+scripts longer. The asset links in `index.html` and `privacy.html` carry a `?v=N` query. Raise
+`N` in every link when a stylesheet or the script changes, so a visitor's browser fetches the
+new file with the new page.
+
 ## Libraries
 
 GSAP 3.13 and Lenis 1 load from jsDelivr. Fonts load from Google Fonts. Nothing else.

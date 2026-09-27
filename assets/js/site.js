@@ -19,6 +19,8 @@
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (typeof window.gsap === "undefined") { html.classList.remove("js"); return; }
   gsap.registerPlugin(ScrollTrigger);
+  // A phone's address bar changes the viewport height while scrolling. That is not a resize.
+  ScrollTrigger.config({ ignoreMobileResize: true });
   const hasSplit = typeof window.SplitText !== "undefined" && typeof SplitText.create === "function";
   if (hasSplit) gsap.registerPlugin(SplitText);
 
@@ -163,8 +165,12 @@
     const mm = gsap.matchMedia();
 
     mm.add("(max-width: 980px)", () => {
-      // The pinned device takes the top of the viewport; the text gets what is left.
+      // The pinned device takes the top of the viewport; the text gets what is left. The size
+      // follows the width only: the height changes with the address bar on every scroll.
+      let fittedWidth = 0;
       const fit = () => {
+        if (window.innerWidth === fittedWidth) return;
+        fittedWidth = window.innerWidth;
         const s = Math.max(0.34, Math.min(0.58, (window.innerHeight - 314) / 874));
         device.style.setProperty("--s", s.toFixed(3));
       };
