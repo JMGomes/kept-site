@@ -1,5 +1,6 @@
 /* Kept website. Smooth scroll with Lenis, motion with GSAP. Every animation degrades to a
-   static page when a library fails to load or the visitor prefers reduced motion. */
+   static page when a library fails to load or the visitor prefers reduced motion. Layout
+   modes follow the viewport: each media-query context sets itself up and tears itself down. */
 (function () {
   const html = document.documentElement;
   html.classList.add("js");
@@ -16,10 +17,9 @@
   document.querySelectorAll("[data-app]").forEach((el) => { el.innerHTML = tiles[el.dataset.app] || ""; });
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const hasGsap = typeof window.gsap !== "undefined";
-  if (!hasGsap) { html.classList.remove("js"); return; }
+  if (typeof window.gsap === "undefined") { html.classList.remove("js"); return; }
   gsap.registerPlugin(ScrollTrigger);
-  const hasSplit = typeof window.SplitText !== "undefined";
+  const hasSplit = typeof window.SplitText !== "undefined" && typeof SplitText.create === "function";
   if (hasSplit) gsap.registerPlugin(SplitText);
 
   if (reduce) {
@@ -54,31 +54,31 @@
     onUpdate: (self) => nav.classList.toggle("hidden", self.direction === 1 && self.scroll() > 200),
   });
 
-  // Headlines: each line rises from its own mask.
-  function splitLines(el) {
-    if (!hasSplit) return [el];
-    const split = new SplitText(el, { type: "lines", linesClass: "split-line" });
-    return split.lines.map((line) => {
-      const mask = document.createElement("span");
-      mask.className = "line-mask";
-      line.parentNode.insertBefore(mask, line);
-      const inner = document.createElement("div");
-      mask.appendChild(inner);
-      inner.appendChild(line);
-      return inner;
+  const ease = "power3.out";
+
+  // Headlines: each line rises from its own mask. The split follows the width, so a resize
+  // re-splits and replays the entrance.
+  function splitReveal(el, vars) {
+    if (!hasSplit) {
+      gsap.from(el, Object.assign({ y: 24, opacity: 0, ease }, vars));
+      return;
+    }
+    SplitText.create(el, {
+      type: "lines",
+      linesClass: "split-line",
+      mask: "lines",
+      autoSplit: true,
+      onSplit: (self) => gsap.from(self.lines, Object.assign({ yPercent: 110, ease: "power4.out" }, vars)),
     });
   }
-  const ease = "power3.out";
 
   // Hero
   const hero = document.querySelector(".hero");
-  const intro = gsap.timeline({ defaults: { ease } });
   const heroTitle = hero.querySelector("h1");
-  const heroLines = splitLines(heroTitle);
   gsap.set(heroTitle, { opacity: 1 });
-  intro
+  splitReveal(heroTitle, { duration: 1.1, stagger: 0.12, delay: 0.2 });
+  gsap.timeline({ defaults: { ease } })
     .from(hero.querySelector(".eyebrow"), { y: 10, opacity: 0, duration: 0.6 }, 0.1)
-    .from(heroLines, { yPercent: 110, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.2)
     .fromTo(hero.querySelector(".amber-rule"), { "--rule": 0 }, { "--rule": 1, duration: 0.8, ease: "power2.inOut" }, 0.9)
     .from(hero.querySelector(".lede"), { y: 16, opacity: 0, duration: 0.8 }, 1.0)
     .from(hero.querySelectorAll(".btn"), { y: 14, opacity: 0, duration: 0.7, stagger: 0.08 }, 1.15)
@@ -117,40 +117,31 @@
 
   // Section headlines split and rise; other blocks fade up.
   document.querySelectorAll("[data-split]").forEach((el) => {
-    const lines = splitLines(el);
-    gsap.from(lines, { yPercent: 110, duration: 1.0, stagger: 0.1, ease: "power4.out", scrollTrigger: { trigger: el, start: "top 85%" } });
+    splitReveal(el, { duration: 1.0, stagger: 0.1, scrollTrigger: { trigger: el, start: "top 85%" } });
   });
   document.querySelectorAll("[data-reveal]").forEach((el) => {
     const delay = parseFloat(el.dataset.reveal) || 0;
     gsap.fromTo(el, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, delay, ease, scrollTrigger: { trigger: el, start: "top 88%" } });
   });
   document.querySelectorAll("[data-stagger]").forEach((group) => {
-    const items = group.children;
-    gsap.fromTo(items, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease, scrollTrigger: { trigger: group, start: "top 85%" } });
+    gsap.fromTo(group.children, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease, scrollTrigger: { trigger: group, start: "top 85%" } });
   });
 
-  // Amber rules under headlines draw when they arrive.
-  document.querySelectorAll("[data-split] .amber-rule, h2 .amber-rule").forEach((el) => {
-    if (hero.contains(el)) return;
+  // Amber rules under section headlines draw when they arrive.
+  document.querySelectorAll("h2 .amber-rule").forEach((el) => {
     gsap.fromTo(el, { "--rule": 0 }, { "--rule": 1, duration: 0.9, ease: "power2.inOut", scrollTrigger: { trigger: el, start: "top 85%" } });
   });
 
-  // How it works: the sticky phone shows the step in view.
+  // How it works. Desktop: a sticky phone beside scrolling steps. Phones: the block pins as a
+  // whole and scrolling steps through it. Each mode builds inside its own media context and
+  // reverts when the width crosses the breakpoint.
   setupScreens(true);
   function setupScreens(animate) {
     const phone = document.querySelector(".how-phone");
     if (!phone) return;
     const device = phone.querySelector(".device");
     const screens = phone.querySelectorAll(".screen");
-    const narrow = window.matchMedia("(max-width: 980px)");
-    // On a phone the pinned device takes the top of the viewport; keep room for the text.
-    function fitPhone() {
-      if (!narrow.matches) { device.style.removeProperty("--s"); return; }
-      const s = Math.max(0.34, Math.min(0.58, (window.innerHeight - 314) / 874));
-      device.style.setProperty("--s", s.toFixed(3));
-    }
-    fitPhone();
-    window.addEventListener("resize", () => { fitPhone(); if (animate) ScrollTrigger.refresh(); });
+    const steps = Array.from(document.querySelectorAll(".how .step"));
     let current = null;
     function show(name) {
       if (name === current) return;
@@ -166,11 +157,19 @@
       });
       device.classList.toggle("night", name === "strict");
     }
-    const steps = Array.from(document.querySelectorAll(".how .step"));
     show(steps[0].dataset.screen);
     if (!animate) return;
-    if (narrow.matches) {
-      // Phones: pin the block and step through it. The text crossfades under the device.
+
+    const mm = gsap.matchMedia();
+
+    mm.add("(max-width: 980px)", () => {
+      // The pinned device takes the top of the viewport; the text gets what is left.
+      const fit = () => {
+        const s = Math.max(0.34, Math.min(0.58, (window.innerHeight - 314) / 874));
+        device.style.setProperty("--s", s.toFixed(3));
+      };
+      fit();
+      window.addEventListener("resize", fit);
       html.classList.add("pin-how");
       const box = document.querySelector(".how-steps");
       const dots = document.createElement("div");
@@ -192,16 +191,31 @@
         invalidateOnRefresh: true,
         onUpdate: (self) => setActive(Math.min(steps.length - 1, Math.floor(self.progress * steps.length))),
       });
-      return;
-    }
-    steps.forEach((step) => {
-      ScrollTrigger.create({
-        trigger: step,
-        start: "top 55%",
-        end: "bottom 45%",
-        onEnter: () => show(step.dataset.screen),
-        onEnterBack: () => show(step.dataset.screen),
+      return () => {
+        window.removeEventListener("resize", fit);
+        device.style.removeProperty("--s");
+        html.classList.remove("pin-how");
+        dots.remove();
+        steps.forEach((s) => s.classList.remove("active"));
+        current = null;
+        show(steps[0].dataset.screen);
+      };
+    });
+
+    mm.add("(min-width: 981px)", () => {
+      steps.forEach((step) => {
+        ScrollTrigger.create({
+          trigger: step,
+          start: "top 55%",
+          end: "bottom 45%",
+          onEnter: () => show(step.dataset.screen),
+          onEnterBack: () => show(step.dataset.screen),
+        });
       });
+      return () => {
+        current = null;
+        show(steps[0].dataset.screen);
+      };
     });
   }
 

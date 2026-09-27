@@ -82,9 +82,8 @@ h3 { font-size: clamp(26px, 2.4vw, 34px); letter-spacing: -0.015em; line-height:
   transform: scaleX(var(--rule, 1));
 }
 
-/* Split lines: every line sits in its own mask. */
-.line-mask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
-.line-mask > div { display: block; }
+/* Split lines: every line sits in its own mask, with room for descenders and the amber rule. */
+.split-line-mask { padding-bottom: 0.1em; margin-bottom: -0.1em; }
 
 /* Buttons */
 .btn {
