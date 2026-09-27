@@ -1,0 +1,170 @@
+/* Phone screens, drawn in HTML at 402 x 874 points with the app's sizes and scaled by --s.
+   A .device is light unless it also has .night. */
+
+.device {
+  --s: 0.8;
+  --page: #f5efe4; --panel: #efe6d6; --ink: #1c1915; --body: #4a4239; --muted: #6b6152; --hair: #dcd2be; --badge: #e6dbc6; --island: #17140f;
+  position: relative;
+  width: calc(402px * var(--s) + 12px);
+  height: calc(874px * var(--s) + 12px);
+  border: 6px solid var(--ink);
+  border-radius: calc(58px * var(--s) + 6px);
+  overflow: hidden;
+  background: var(--page);
+  color: var(--ink);
+  box-shadow: 0 50px 100px -40px rgba(28, 25, 21, 0.45), 0 0 0 1px rgba(28, 25, 21, 0.06);
+  transition: background-color 0.6s, border-color 0.6s;
+}
+.device.night { --page: #17140f; --panel: #1f1b14; --ink: #f5efe4; --body: #c9bea8; --muted: #a89878; --hair: #3a342a; --badge: #2a2519; --island: #000; border-color: #3a342a; }
+.device-inner { position: relative; width: calc(402px * var(--s)); height: calc(874px * var(--s)); }
+.screen {
+  position: absolute;
+  left: 0; top: 0;
+  width: 402px;
+  height: 874px;
+  padding: 58px 24px 0;
+  transform: scale(var(--s));
+  transform-origin: 0 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.3;
+  transition: background-color 0.6s, color 0.6s;
+}
+.island { position: absolute; left: 50%; top: 11px; width: 125px; height: 37px; margin-left: -62.5px; border-radius: 20px; background: var(--island); }
+
+.screen .serif { font-family: "Newsreader", Georgia, serif; font-weight: 400; }
+.screen .kicker { font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); line-height: 1; }
+.screen .nav { position: static; display: flex; justify-content: space-between; align-items: center; height: 22px; padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.screen .nav .back { font-size: 17px; color: var(--muted); }
+.screen .h1 { font-family: "Newsreader", Georgia, serif; font-size: 34px; line-height: 1.1; letter-spacing: -0.01em; margin-top: 16px; }
+.screen .sub { font-size: 15px; line-height: 1.35; color: var(--body); margin-top: 10px; }
+.screen .primary { position: absolute; left: 24px; right: 24px; height: 56px; border-radius: 16px; background: var(--ink); color: var(--page); font-size: 17px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+.device.night .screen .primary { background: #e9b949; color: #17140f; }
+.screen .outlined { height: 56px; border: 1.5px solid var(--ink); border-radius: 16px; font-size: 17px; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+.screen .hair { height: 1px; background: var(--hair); }
+
+.screen .smark { position: relative; background: #e9b949; border: 1.5px solid var(--ink); }
+.screen .smark::before, .screen .smark::after { content: ""; position: absolute; background: var(--ink); }
+.screen .smark::before { left: 50%; top: 0; bottom: 0; width: 1.5px; margin-left: -0.75px; }
+.screen .smark::after { top: 50%; left: 0; right: 0; height: 1.5px; margin-top: -0.75px; }
+.screen .sglow { box-shadow: 0 0 40px 14px rgba(233, 185, 73, 0.42); }
+
+.screen .tile { border-radius: 6.4px; overflow: hidden; flex: none; width: 22px; height: 22px; }
+.screen .tile svg { display: block; width: 100%; height: 100%; }
+.screen .tiles { display: flex; align-items: center; margin-right: 2px; }
+.screen .tiles .tile { margin-left: -6.6px; box-shadow: 0 0 0 2px var(--ring, var(--page)); }
+.screen .tiles .tile:first-child { margin-left: 0; }
+.screen .disc { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; }
+.screen .disc img { width: 13px; height: 13px; display: block; }
+.screen .disc.badge { background: var(--badge); } .screen .disc.badge img { width: 14px; height: 14px; }
+.screen .disc.amber { background: #e9b949; border: 1.5px solid #1c1915; }
+.screen .disc.ink { background: var(--ink); } .screen .disc.ink img { width: 14px; height: 14px; }
+.screen .disc.page { background: var(--page); border: 1.5px solid var(--ink); }
+.screen .lockdisc { width: 24px; height: 24px; border-radius: 50%; background: var(--ink); border: 1.5px solid #e9b949; display: flex; align-items: center; justify-content: center; flex: none; }
+.screen .lockdisc img { width: 14px; height: 14px; }
+
+/* Moments card, 42a */
+.screen .card { --ring: var(--page); border: 1.5px solid var(--ink); border-radius: 14px; background: var(--page); padding: 14px 18px 16px; margin-top: 12px; }
+.screen .card.active { --ring: var(--panel); background: var(--panel); }
+.screen .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.screen .name-row { display: flex; align-items: center; gap: 8px; }
+.screen .name { font-family: "Newsreader", Georgia, serif; font-size: 21px; line-height: 1.1; white-space: nowrap; }
+.screen .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4.5px 11px; border-radius: 999px; border: 1.5px solid var(--hair); font-size: 13px; font-weight: 500; color: var(--body); white-space: nowrap; }
+.screen .pill.running { background: #e9b949; border-color: #1c1915; color: #1c1915; }
+.screen .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: #1c1915; box-shadow: 0 0 0 3px rgba(28, 25, 21, 0.18); }
+.screen .row { display: flex; align-items: center; gap: 8px; margin-top: 7px; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.screen .card .row:first-of-type { margin-top: 0; }
+
+/* Editor rows */
+.screen .approw { display: flex; align-items: center; gap: 14px; height: 74px; padding: 0 18px; border: 1.5px solid var(--ink); border-radius: 14px; margin-top: 10px; }
+.screen .approw .tile { width: 36px; height: 36px; border-radius: 10px; }
+.screen .approw .label { font-size: 17px; flex: 1; }
+.screen .approw .remove { font-size: 17px; color: var(--muted); }
+.screen .line { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; }
+.screen .line .t { font-size: 17px; } .screen .line .s { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.screen .line .r { font-size: 17px; color: var(--muted); }
+.screen .toggle { width: 51px; height: 31px; border-radius: 16px; position: relative; flex: none; }
+.screen .toggle.on { background: var(--ink); }
+.screen .toggle.on .knob { position: absolute; top: 2px; right: 2px; width: 27px; height: 27px; border-radius: 50%; background: #e9b949; border: 1.5px solid #1c1915; }
+.screen .toggle.off { background: var(--panel); border: 1.5px solid var(--hair); }
+.screen .toggle.off .knob { position: absolute; top: 1.5px; left: 1.5px; width: 26px; height: 26px; border-radius: 50%; background: var(--page); border: 1.5px solid var(--muted); }
+
+/* Cost sheet, 36c */
+.screen .sheet { position: absolute; left: 0; right: 0; top: 40px; bottom: 0; background: var(--page); border-radius: 10px 10px 0 0; padding: 12px 24px 0; }
+.screen .grabber { width: 36px; height: 5px; border-radius: 3px; background: var(--hair); margin: 0 auto 12px; }
+.screen .crow { display: flex; align-items: center; gap: 14px; min-height: 56px; padding: 8px 14px 8px 10px; border: 1.5px solid var(--ink); border-radius: 12px; margin-top: 6px; position: relative; }
+.screen .crow.chosen { background: var(--panel); box-shadow: inset 0 0 0 1px var(--ink), inset 0 0 0 3px var(--panel), inset 0 0 0 4px var(--ink); }
+.screen .ctile { width: 40px; height: 40px; border-radius: 11px; border: 1.5px solid var(--hair); display: flex; align-items: center; justify-content: center; flex: none; }
+.screen .crow.chosen .ctile { border-color: var(--ink); }
+.screen .ctile img { width: 24px; height: 24px; }
+.screen .ctext { flex: 1; } .screen .ctitle { font-size: 16px; font-weight: 500; } .screen .cexp { font-size: 13px; color: var(--muted); margin-top: 2px; line-height: 1.25; }
+.screen .try { font-size: 14px; font-weight: 500; text-decoration: underline; } .screen .setup { font-size: 14px; color: var(--muted); }
+
+/* When and where, 10a */
+.screen .days { display: flex; gap: 6.5px; margin-top: 16px; }
+.screen .day { flex: 1; height: 44px; border: 1.5px solid var(--hair); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; color: var(--muted); }
+.screen .day.on { background: var(--ink); border-color: var(--ink); color: var(--page); font-weight: 500; }
+.screen .times { display: flex; gap: 12px; margin-top: 16px; }
+.screen .time { flex: 1; height: 80px; border: 1.5px solid var(--ink); border-radius: 14px; padding: 12px 16px; }
+.screen .time .l { font-size: 15px; color: var(--muted); } .screen .time .v { font-family: "Newsreader", Georgia, serif; font-size: 34px; line-height: 1; margin-top: 4px; }
+.screen .seg { display: flex; height: 44px; border: 1.5px solid var(--ink); border-radius: 14px; overflow: hidden; }
+.screen .seg div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; }
+.screen .seg .on { background: var(--ink); color: var(--page); }
+.device.night .screen .seg .on { background: #e9b949; color: #17140f; }
+.screen .placerow { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border: 1.5px solid var(--ink); border-radius: 14px; margin-top: 16px; }
+.screen .placetile { width: 40px; height: 40px; border-radius: 10px; background: var(--panel); border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; }
+.screen .placetile i { width: 10px; height: 10px; border-radius: 50%; background: #e9b949; border: 1.5px solid #1c1915; }
+
+/* Strength, 12d */
+.screen .chips { display: flex; gap: 8px; margin-top: 18px; }
+.screen .chip { flex: 1; height: 44px; border: 1.5px solid var(--hair); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.screen .chip.on { background: #e9b949; border-color: #e9b949; color: #1c1915; font-weight: 500; }
+.screen .sealed { margin-top: 16px; border-radius: 14px; background: var(--ink); color: var(--page); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; box-shadow: none; }
+.screen .sealed .lock { width: 32px; height: 32px; border-radius: 50%; background: #e9b949; border: 1.5px solid #1c1915; display: flex; align-items: center; justify-content: center; flex: none; margin: 0; }
+.screen .sealed .lock img { width: 18px; height: 18px; }
+.screen .sealed .k { font-size: 12px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--page); opacity: 0.7; }
+.screen .sealed .l { font-family: "Newsreader", Georgia, serif; font-size: 17px; line-height: 1.35; margin-top: 4px; }
+.screen .control { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+.screen .control .v { font-size: 22px; margin-top: 6px; }
+.screen .stepper { display: flex; gap: 10px; }
+.screen .box { width: 44px; height: 44px; border: 1.5px solid var(--hair); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--muted); }
+.screen .dchips { display: flex; gap: 8px; margin-top: 10px; }
+.screen .dchip { flex: 1; height: 44px; border: 1.5px solid var(--hair); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.screen .dchip.on { background: var(--ink); border-color: var(--ink); color: var(--page); font-weight: 500; }
+
+/* Reports, 21b */
+.screen .rseg { display: flex; height: 44px; border: 1.5px solid var(--ink); border-radius: 14px; overflow: hidden; margin-top: 14px; }
+.screen .rseg div { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.screen .rseg .on { background: var(--ink); color: var(--page); font-weight: 500; }
+.screen .ours { border: 1.5px solid var(--ink); border-radius: 16px; padding: 16px 18px 18px; margin-top: 14px; }
+.screen .ours .h { font-family: "Newsreader", Georgia, serif; font-size: 28px; line-height: 1.15; letter-spacing: -0.01em; margin-top: 8px; }
+.screen .marks { display: flex; gap: 6px; margin-top: 14px; }
+.screen .col { flex: 1; display: flex; flex-direction: column-reverse; align-items: stretch; gap: 4px; }
+.screen .m { height: 15px; border-radius: 2px; background: #e9b949; border: 1.5px solid var(--ink); transform: none; }
+.screen .m.pale { background: var(--panel); }
+.screen .m.empty { background: transparent; border: 1.5px dashed var(--muted); }
+.screen .dl { font-size: 13px; color: var(--muted); text-align: center; margin-top: 6px; }
+.screen .impact { border: 1.5px solid var(--hair); border-radius: 16px; background: var(--panel); padding: 14px 18px 14px; margin-top: 10px; }
+.screen .impact .tiles { --ring: var(--panel); }
+.screen .irow { margin-top: 10px; }
+.screen .ihead { display: flex; align-items: center; gap: 10px; }
+.screen .iname { font-size: 17px; flex: 1; }
+.screen .ibefore { font-family: "Newsreader", Georgia, serif; font-size: 15px; color: var(--muted); }
+.screen .iafter { font-family: "Newsreader", Georgia, serif; font-size: 20px; margin-left: 4px; }
+.screen .ibar { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.screen .track { flex: 1; height: 12px; background: var(--hair); position: relative; }
+.screen .sfill { position: absolute; left: 0; top: 0; height: 100%; background: #e9b949; border: 1.5px solid var(--ink); }
+.screen .back { width: 70px; text-align: right; font-size: 13px; }
+.screen .note { font-size: 13px; line-height: 1.35; color: var(--muted); margin-top: 10px; }
+.screen .mrow { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: 17px; }
+.screen .mrow .r { color: var(--muted); font-size: 15px; }
+
+/* Today, 7a */
+.screen .today-top { display: flex; justify-content: space-between; align-items: center; height: 22px; }
+.screen .facts { display: flex; border: 1.5px solid var(--ink); border-radius: 14px; margin-top: 26px; }
+.screen .fact { flex: 1; padding: 14px 8px 12px; text-align: center; border: 0; }
+.screen .fact + .fact { border-left: 1.5px solid var(--ink); }
+.screen .fact .n { font-family: "Newsreader", Georgia, serif; font-size: 28px; line-height: 1; }
+.screen .fact .l { font-size: 13px; color: var(--muted); margin-top: 6px; }
