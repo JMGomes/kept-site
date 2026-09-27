@@ -23,8 +23,9 @@ Open `http://localhost:8000/`.
 
 ## Deploy
 
-GitHub Pages serves the `main` branch from the repository root. `.nojekyll` keeps Pages from
-processing the files. Push to `main` and the site updates.
+The site is live at https://jmgomes.github.io/kept-site/. GitHub Pages serves the `main`
+branch from the repository root. `.nojekyll` keeps Pages from processing the files. Push to
+`main` and the site updates within a minute or two.
 
 ## Libraries
 
