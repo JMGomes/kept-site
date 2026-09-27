@@ -192,14 +192,6 @@ h3 { font-size: clamp(26px, 2.4vw, 34px); letter-spacing: -0.015em; line-height:
 html[data-draft="a"] .hero-b, html[data-draft="a"] .aurora { display: none; }
 html[data-draft="b"] .hero-a { display: none; }
 
-/* The quiet strip */
-.strip { border-top: 1.5px solid var(--ink); border-bottom: 1.5px solid var(--ink); padding: 22px 0; overflow: hidden; background: var(--page); }
-.strip .track { display: flex; gap: 48px; width: max-content; will-change: transform; }
-.strip .item { display: inline-flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 26px; white-space: nowrap; }
-.strip .item .tile { width: 30px; height: 30px; border-radius: 8px; }
-.strip .item .glyph { width: 30px; height: 30px; border-radius: 50%; background: var(--badge); display: inline-flex; align-items: center; justify-content: center; }
-.strip .item .glyph img { width: 18px; height: 18px; }
-
 /* Moments: three cards. Draft A: a grid. Draft B: a pinned horizontal rail. */
 .moments-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 @media (max-width: 980px) { .moments-grid { grid-template-columns: 1fr; max-width: 520px; } }

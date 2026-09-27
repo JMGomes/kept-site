@@ -135,13 +135,6 @@
     });
   }
 
-  // The strip: one endless drift.
-  const track = document.querySelector(".strip .track");
-  if (track) {
-    track.innerHTML += track.innerHTML;
-    gsap.to(track, { xPercent: -50, duration: 40, ease: "none", repeat: -1 });
-  }
-
   // Section headlines split and rise; other blocks fade up.
   document.querySelectorAll("[data-split]").forEach((el) => {
     const lines = splitLines(el);
