@@ -3,10 +3,6 @@
 (function () {
   const html = document.documentElement;
   html.classList.add("js");
-  const params = new URLSearchParams(location.search);
-  const draft = params.get("draft") === "b" ? "b" : "a";
-  html.dataset.draft = draft;
-  document.querySelectorAll(".drafts a").forEach((a) => a.classList.toggle("on", a.dataset.draft === draft));
 
   // App tiles: stylised marks in the brands' colours, stamped into every [data-app].
   const tiles = {
@@ -36,7 +32,7 @@
   // Smooth scroll, kept in step with ScrollTrigger.
   let lenis = null;
   if (typeof window.Lenis !== "undefined") {
-    lenis = new Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 });
+    lenis = new window.Lenis({ lerp: 0.09, smoothWheel: true, wheelMultiplier: 1 });
     lenis.on("scroll", ScrollTrigger.update);
     gsap.ticker.add((t) => lenis.raf(t * 1000));
     gsap.ticker.lagSmoothing(0);
@@ -75,35 +71,19 @@
   const ease = "power3.out";
 
   // Hero
-  const hero = document.querySelector(draft === "b" ? ".hero-b" : ".hero-a");
+  const hero = document.querySelector(".hero");
   const intro = gsap.timeline({ defaults: { ease } });
   const heroTitle = hero.querySelector("h1");
   const heroLines = splitLines(heroTitle);
   gsap.set(heroTitle, { opacity: 1 });
-  if (draft === "a") {
-    intro
-      .from(hero.querySelector(".eyebrow"), { y: 10, opacity: 0, duration: 0.6 }, 0.1)
-      .from(heroLines, { yPercent: 110, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.2)
-      .fromTo(hero.querySelector(".amber-rule"), { "--rule": 0 }, { "--rule": 1, duration: 0.8, ease: "power2.inOut" }, 0.9)
-      .from(hero.querySelector(".lede"), { y: 16, opacity: 0, duration: 0.8 }, 1.0)
-      .from(hero.querySelectorAll(".btn"), { y: 14, opacity: 0, duration: 0.7, stagger: 0.08 }, 1.15)
-      .from(hero.querySelector(".hero-phone-wrap"), { y: 60, opacity: 0, duration: 1.3, ease: "power4.out" }, 0.5)
-      .from(hero.querySelector(".ghost-mark"), { scale: 0.9, opacity: 0, duration: 1.6, ease: "power2.out" }, 0.3);
-  } else {
-    const fill = hero.querySelector(".hero-mark .fill");
-    intro
-      .fromTo(hero.querySelector(".hero-mark"), { scale: 0.92, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8 }, 0)
-      .fromTo(fill, { scaleY: 0 }, { scaleY: 1, duration: 1.3, ease: "power2.inOut" }, 0.3)
-      .to(hero.querySelector(".hero-mark"), { boxShadow: "0 0 70px 22px rgba(233,185,73,0.42)", duration: 0.9 }, 1.3)
-      .from(heroLines, { yPercent: 110, duration: 1.0, stagger: 0.1, ease: "power4.out" }, 1.0)
-      .from(hero.querySelector(".lede"), { y: 16, opacity: 0, duration: 0.8 }, 1.6)
-      .from(hero.querySelectorAll(".btn"), { y: 14, opacity: 0, duration: 0.7, stagger: 0.08 }, 1.75)
-      .from(hero.querySelector(".hero-phone-wrap"), { y: 80, opacity: 0, duration: 1.4, ease: "power4.out" }, 1.4);
-    // Aurora drift
-    document.querySelectorAll(".aurora i").forEach((blob, i) => {
-      gsap.to(blob, { x: () => gsap.utils.random(-80, 80), y: () => gsap.utils.random(-60, 60), duration: 9 + i * 2, ease: "sine.inOut", repeat: -1, yoyo: true, repeatRefresh: true });
-    });
-  }
+  intro
+    .from(hero.querySelector(".eyebrow"), { y: 10, opacity: 0, duration: 0.6 }, 0.1)
+    .from(heroLines, { yPercent: 110, duration: 1.1, stagger: 0.12, ease: "power4.out" }, 0.2)
+    .fromTo(hero.querySelector(".amber-rule"), { "--rule": 0 }, { "--rule": 1, duration: 0.8, ease: "power2.inOut" }, 0.9)
+    .from(hero.querySelector(".lede"), { y: 16, opacity: 0, duration: 0.8 }, 1.0)
+    .from(hero.querySelectorAll(".btn"), { y: 14, opacity: 0, duration: 0.7, stagger: 0.08 }, 1.15)
+    .from(hero.querySelector(".hero-phone-wrap"), { y: 60, opacity: 0, duration: 1.3, ease: "power4.out" }, 0.5)
+    .from(hero.querySelector(".ghost-mark"), { scale: 0.9, opacity: 0, duration: 1.6, ease: "power2.out" }, 0.3);
 
   // Phone tilt in the hero, following the pointer.
   const tilt = hero.querySelector(".tilt");
@@ -155,14 +135,6 @@
     gsap.fromTo(el, { "--rule": 0 }, { "--rule": 1, duration: 0.9, ease: "power2.inOut", scrollTrigger: { trigger: el, start: "top 85%" } });
   });
 
-  // Draft B: the moments rail pins and slides sideways.
-  if (draft === "b" && window.innerWidth > 980) {
-    const outer = document.querySelector(".moments-rail-outer");
-    const rail = document.querySelector(".moments-rail");
-    const distance = () => rail.scrollWidth - outer.clientWidth;
-    gsap.to(rail, { x: () => -distance(), ease: "none", scrollTrigger: { trigger: outer, pin: true, scrub: 1, start: "center center", end: () => "+=" + distance(), invalidateOnRefresh: true } });
-  }
-
   // How it works: the sticky phone shows the step in view.
   setupScreens(true);
   function setupScreens(animate) {
@@ -170,6 +142,15 @@
     if (!phone) return;
     const device = phone.querySelector(".device");
     const screens = phone.querySelectorAll(".screen");
+    const narrow = window.matchMedia("(max-width: 980px)");
+    // On a phone the pinned device takes the top of the viewport; keep room for the text.
+    function fitPhone() {
+      if (!narrow.matches) { device.style.removeProperty("--s"); return; }
+      const s = Math.max(0.34, Math.min(0.58, (window.innerHeight - 314) / 874));
+      device.style.setProperty("--s", s.toFixed(3));
+    }
+    fitPhone();
+    window.addEventListener("resize", () => { fitPhone(); if (animate) ScrollTrigger.refresh(); });
     let current = null;
     function show(name) {
       if (name === current) return;
@@ -185,9 +166,34 @@
       });
       device.classList.toggle("night", name === "strict");
     }
-    const steps = document.querySelectorAll(".how .step");
+    const steps = Array.from(document.querySelectorAll(".how .step"));
     show(steps[0].dataset.screen);
     if (!animate) return;
+    if (narrow.matches) {
+      // Phones: pin the block and step through it. The text crossfades under the device.
+      html.classList.add("pin-how");
+      const box = document.querySelector(".how-steps");
+      const dots = document.createElement("div");
+      dots.className = "how-dots";
+      steps.forEach(() => dots.appendChild(document.createElement("i")));
+      box.appendChild(dots);
+      const setActive = (i) => {
+        steps.forEach((s, k) => s.classList.toggle("active", k === i));
+        dots.querySelectorAll("i").forEach((d, k) => d.classList.toggle("on", k === i));
+        show(steps[i].dataset.screen);
+      };
+      setActive(0);
+      ScrollTrigger.create({
+        trigger: ".how",
+        start: "top 72px",
+        end: () => "+=" + steps.length * 480,
+        pin: true,
+        pinSpacing: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => setActive(Math.min(steps.length - 1, Math.floor(self.progress * steps.length))),
+      });
+      return;
+    }
     steps.forEach((step) => {
       ScrollTrigger.create({
         trigger: step,

@@ -1,5 +1,4 @@
-/* Kept website. Light theme in the app's own tokens. Two drafts share this sheet; the
-   html[data-draft] attribute switches the hero and the moments layout. */
+/* Kept website. Light theme in the app's own tokens. */
 
 :root {
   --page: #f5efe4;
@@ -161,45 +160,21 @@ h3 { font-size: clamp(26px, 2.4vw, 34px); letter-spacing: -0.015em; line-height:
 .hero-phone-wrap .halo { position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(233, 185, 73, 0.35), rgba(233, 185, 73, 0) 62%); filter: blur(10px); }
 .tilt { transform-style: preserve-3d; will-change: transform; }
 
-/* Hero A: editorial, two columns. */
-.hero-a .wrap { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; width: 100%; }
-.hero-a .ghost-mark { position: absolute; right: -6vw; top: 12vh; width: 46vw; max-width: 640px; aspect-ratio: 3 / 4; border: 2px solid var(--hair); pointer-events: none; opacity: 0.8; }
-.hero-a .ghost-mark::before, .hero-a .ghost-mark::after { content: ""; position: absolute; background: var(--hair); }
-.hero-a .ghost-mark::before { left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; }
-.hero-a .ghost-mark::after { top: 50%; left: 0; right: 0; height: 2px; margin-top: -1px; }
-.hero-a .device { --s: 0.78; }
+.hero .wrap { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; width: 100%; }
+.hero .ghost-mark { position: absolute; right: -6vw; top: 12vh; width: 46vw; max-width: 640px; aspect-ratio: 3 / 4; border: 2px solid var(--hair); pointer-events: none; opacity: 0.8; }
+.hero .ghost-mark::before, .hero .ghost-mark::after { content: ""; position: absolute; background: var(--hair); }
+.hero .ghost-mark::before { left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; }
+.hero .ghost-mark::after { top: 50%; left: 0; right: 0; height: 2px; margin-top: -1px; }
+.hero .device { --s: 0.78; }
 @media (max-width: 980px) {
-  .hero-a .wrap { grid-template-columns: 1fr; }
-  .hero-a .ghost-mark { display: none; }
-  .hero-a .device { --s: 0.62; }
+  .hero .wrap { grid-template-columns: 1fr; }
+  .hero .ghost-mark { display: none; }
+  .hero .device { --s: 0.62; }
 }
 
-/* Hero B: kinetic, centred, aurora behind. */
-.hero-b { text-align: center; }
-.hero-b .wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.hero-b .mark.hero-mark { width: clamp(120px, 14vw, 180px); aspect-ratio: 3 / 4; margin-bottom: 40px; }
-.hero-b h1 { max-width: 14ch; }
-.hero-b .lede { text-align: center; margin-left: auto; margin-right: auto; }
-.hero-b .btn-row { justify-content: center; }
-.hero-b .hero-phone-wrap { margin-top: 64px; }
-.hero-b .device { --s: 0.72; }
-.aurora { position: absolute; inset: -20%; z-index: 0; pointer-events: none; overflow: hidden; }
-.aurora i { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5; }
-.aurora i:nth-child(1) { width: 52vw; height: 52vw; left: -8vw; top: -6vw; background: radial-gradient(circle, #f2cf6e, rgba(242, 207, 110, 0) 62%); }
-.aurora i:nth-child(2) { width: 44vw; height: 44vw; right: -8vw; top: 12vw; background: radial-gradient(circle, #f6d9c2, rgba(246, 217, 194, 0) 62%); }
-.aurora i:nth-child(3) { width: 40vw; height: 40vw; left: 30vw; bottom: -14vw; background: radial-gradient(circle, #e9b949, rgba(233, 185, 73, 0) 64%); }
-.hero-b .wrap { position: relative; z-index: 1; }
-html[data-draft="a"] .hero-b, html[data-draft="a"] .aurora { display: none; }
-html[data-draft="b"] .hero-a { display: none; }
-
-/* Moments: three cards. Draft A: a grid. Draft B: a pinned horizontal rail. */
+/* Moments: three cards. */
 .moments-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 @media (max-width: 980px) { .moments-grid { grid-template-columns: 1fr; max-width: 520px; } }
-.moments-rail-outer { overflow: hidden; }
-.moments-rail { display: flex; gap: 24px; width: max-content; padding-right: var(--gutter); }
-.moments-rail .mcard { width: min(440px, 82vw); flex: none; }
-html[data-draft="a"] .moments-rail-outer { display: none; }
-html[data-draft="b"] .moments-grid { display: none; }
 
 .mcard {
   --ring: var(--page);
@@ -242,17 +217,33 @@ html[data-draft="b"] .moments-grid { display: none; }
 .how .step p { color: var(--body); font-size: 18px; margin-top: 18px; }
 .how .step ul { list-style: none; margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px; }
 .how .step li { font-size: 14px; font-weight: 500; border: 1.5px solid var(--hair); border-radius: 999px; padding: 6px 12px; }
-.how-phone { position: sticky; top: 50vh; transform: translateY(-50%); display: flex; justify-content: center; }
-.how-phone .device { --s: 0.82; }
+/* Centred while stuck. The offset is computed from the device height, so the phone never sits
+   above its own place in the flow before it sticks. */
+.how-phone { --s: 0.82; position: sticky; top: calc(50vh - (874px * var(--s) + 12px) / 2); display: flex; justify-content: center; }
+.how-phone .device { --s: inherit; }
 .how-phone .screen { position: absolute; opacity: 0; pointer-events: none; }
 .how-phone .screen.active { opacity: 1; }
-@media (max-height: 820px) { .how-phone .device { --s: 0.68; } }
+.how .step:last-child { min-height: 50vh; }
+@media (max-height: 820px) { .how-phone { --s: 0.68; } }
 @media (max-width: 980px) {
-  .how { grid-template-columns: 1fr; }
-  .how-phone { position: sticky; top: 76px; transform: none; z-index: 2; }
-  .how-phone .device { --s: 0.46; }
-  .how-steps { padding-top: 24px; }
-  .how .step { min-height: 60vh; }
+  /* On a phone the block is pinned as a whole: the device on top, one step's text under it,
+     and scrolling advances the step. The script adds .pin-how and sets --s from the height. */
+  .how { grid-template-columns: 1fr; gap: 0; }
+  .how-phone { --s: 0.5; order: -1; position: static; top: auto; width: 100%; padding: 8px 0 0; display: flex; justify-content: center; }
+  .how-phone .device { box-shadow: 0 24px 50px -30px rgba(28, 25, 21, 0.45); }
+  .how-steps { padding-top: 22px; }
+  .how .step { min-height: 0; max-width: none; justify-content: flex-start; padding: 0 0 28px; }
+  .how .step:last-child { min-height: 0; }
+  .how .step .num { margin-bottom: 10px; font-size: 14px; }
+  .how .step h3 { font-size: 24px; }
+  .how .step p { font-size: 15px; margin-top: 10px; }
+  .how .step ul { display: none; }
+  .pin-how .how-steps { position: relative; min-height: 200px; }
+  .pin-how .how .step { position: absolute; left: 0; right: 0; top: 0; padding: 0; opacity: 0; transform: translateY(10px); transition: opacity 0.45s var(--ease), transform 0.45s var(--ease); pointer-events: none; }
+  .pin-how .how .step.active { opacity: 1; transform: none; pointer-events: auto; }
+  .how-dots { position: absolute; left: 0; bottom: 0; display: flex; gap: 8px; }
+  .how-dots i { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--ink); transition: background-color 0.3s; }
+  .how-dots i.on { background: var(--amber); }
 }
 
 /* Costs */
@@ -363,11 +354,6 @@ html[data-draft="b"] .moments-grid { display: none; }
 .footer .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
 .footer .links { display: flex; gap: 22px; }
 .footer .links a:hover { color: var(--ink); }
-
-/* Draft switch */
-.drafts { position: fixed; right: 18px; bottom: 18px; z-index: 9999; display: flex; gap: 2px; padding: 4px; border-radius: 999px; background: var(--ink); box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.6); }
-.drafts a { padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--page); }
-.drafts a.on { background: var(--amber); color: var(--ink); }
 
 /* Reveal defaults: JS animates; without JS everything is visible. */
 .js [data-reveal] { opacity: 0; }
