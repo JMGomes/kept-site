@@ -5,14 +5,14 @@
   const html = document.documentElement;
   html.classList.add("js");
 
-  // App tiles: stylised marks in the brands' colours, stamped into every [data-app].
+  // Tiles for the apps a moment blocks: Screen Time categories in the app's own palette. No
+  // third-party mark or name appears on this site.
   const tiles = {
-    instagram: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="url(#igg)"/><rect x="12" y="12" width="24" height="24" rx="7.5" fill="none" stroke="#fff" stroke-width="3"/><circle cx="24" cy="24" r="6" fill="none" stroke="#fff" stroke-width="3"/><circle cx="31.4" cy="16.6" r="1.9" fill="#fff"/></svg>',
-    facebook: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#1877f2"/><path d="M27 42V27h5l.8-6H27v-3.8c0-1.7.5-2.9 3-2.9h3V9.3c-.5-.1-2.3-.3-4.4-.3-4.4 0-7.4 2.7-7.4 7.6V21h-5v6h5v15z" fill="#fff"/></svg>',
-    reddit: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#ff4500"/><ellipse cx="24" cy="27" rx="12.5" ry="9.5" fill="#fff"/><circle cx="13" cy="24" r="3" fill="#fff"/><circle cx="35" cy="24" r="3" fill="#fff"/><circle cx="19.5" cy="26.5" r="1.9" fill="#ff4500"/><circle cx="28.5" cy="26.5" r="1.9" fill="#ff4500"/><path d="M19.5 31.5c2.5 2 6.5 2 9 0" stroke="#ff4500" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M24 17.5l2.5-7 6 1.8" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="33" cy="12" r="2.4" fill="#fff"/></svg>',
-    youtube: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#ff0000"/><rect x="9" y="14.5" width="30" height="19" rx="6.5" fill="#fff"/><path d="M21 19.5v9l8.5-4.5z" fill="#ff0000"/></svg>',
-    x: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#0f0f0f"/><path d="M13 12h6.4l6.1 8.6L33 12h3.4l-9.3 10.8L37 36h-6.4l-6.6-9.3L15.4 36H12l10-11.6z" fill="#fff"/></svg>',
-    tiktok: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#0f0f0f"/><path d="M27 10h4.2c.4 3.3 2.4 5.6 5.8 6v4.3c-2.2 0-4.1-.7-5.8-1.9v9.9c0 5.1-3.6 8.7-8.6 8.7-4.8 0-8.4-3.5-8.4-8.3 0-5.3 4.6-9 9.8-8.2v4.4c-2.7-.6-5.4 1.2-5.4 3.9 0 2.3 1.7 4 3.9 4 2.4 0 4.5-1.7 4.5-4.6z" fill="#fff"/></svg>',
+    social: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#C9BEA8"/><circle cx="19" cy="20" r="6" fill="none" stroke="#1C1915" stroke-width="3"/><circle cx="30" cy="29" r="6" fill="none" stroke="#1C1915" stroke-width="3"/></svg>',
+    entertainment: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#A89878"/><rect x="12" y="15" width="24" height="18" rx="4" fill="none" stroke="#1C1915" stroke-width="3"/><path d="M21 21v6l6-3z" fill="#1C1915"/></svg>',
+    games: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#E6DBC6"/><rect x="11" y="17" width="26" height="14" rx="7" fill="none" stroke="#1C1915" stroke-width="3"/><path d="M18 21v6M15 24h6" stroke="#1C1915" stroke-width="3" stroke-linecap="round"/><circle cx="31" cy="24" r="2.4" fill="#1C1915"/></svg>',
+    reading: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#DCD2BE"/><path d="M13 15h9a3 3 0 013 3v15a3 3 0 00-3-3h-9z" fill="none" stroke="#1C1915" stroke-width="3"/><path d="M35 15h-9a3 3 0 00-3 3v15a3 3 0 013-3h9z" fill="none" stroke="#1C1915" stroke-width="3"/></svg>',
+    shopping: '<svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#6B6152"/><path d="M15 18h18l-2 16H17z" fill="none" stroke="#F5EFE4" stroke-width="3"/><path d="M20 18a4 4 0 018 0" fill="none" stroke="#F5EFE4" stroke-width="3"/></svg>',
   };
   document.querySelectorAll("[data-app]").forEach((el) => { el.innerHTML = tiles[el.dataset.app] || ""; });
 
