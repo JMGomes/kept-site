@@ -351,7 +351,7 @@ h3 { font-size: clamp(26px, 2.4vw, 34px); letter-spacing: -0.015em; line-height:
 /* Footer */
 .footer { padding: 40px var(--gutter) 48px; border-top: 1.5px solid var(--ink); }
 .footer .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
-.footer .links { display: flex; gap: 22px; }
+.footer .links { display: flex; flex-wrap: wrap; gap: 10px 22px; }
 .footer .links a:hover { color: var(--ink); }
 
 /* Reveal defaults: JS animates; without JS everything is visible. */
