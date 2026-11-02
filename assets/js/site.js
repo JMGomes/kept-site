@@ -16,6 +16,14 @@
   };
   document.querySelectorAll("[data-app]").forEach((el) => { el.innerHTML = tiles[el.dataset.app] || ""; });
 
+  // An ad or a profile link opens the site with ?ct=<campaign>. The App Store buttons then use
+  // the App Store Connect campaign link of that name, so App Store Connect counts its downloads.
+  const ct = new URLSearchParams(location.search).get("ct");
+  if (ct && /^[a-z0-9-]{1,30}$/.test(ct)) {
+    const store = `https://apps.apple.com/app/apple-store/id6816713953?pt=129485167&ct=${ct}&mt=8`;
+    document.querySelectorAll('a[href="https://apps.apple.com/app/id6816713953"]').forEach((a) => { a.href = store; });
+  }
+
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (typeof window.gsap === "undefined") { html.classList.remove("js"); return; }
   gsap.registerPlugin(ScrollTrigger);
